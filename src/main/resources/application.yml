@@ -11,6 +11,7 @@ spring:
       hibernate:
         format_sql: true
         dialect: org.hibernate.dialect.H2Dialect
+    defer-datasource-initialization: true  # 초기 데이터 로딩을 위한 설정
   datasource:
     url: jdbc:h2:mem:paymentdb
     driver-class-name: org.h2.Driver
@@ -24,6 +25,9 @@ spring:
     user:
       name: admin
       password: admin
+  sql:
+    init:
+      mode: always  # 항상 초기 데이터 로딩
 
 server:
   port: 8080
@@ -81,6 +85,9 @@ spring:
   #   driver-class-name: com.mysql.cj.jdbc.Driver
   #   username: ${DB_USERNAME}
   #   password: ${DB_PASSWORD}
+  sql:
+    init:
+      mode: never  # 운영 환경에서는 초기 데이터 로딩 비활성화
 
 logging:
   level:
