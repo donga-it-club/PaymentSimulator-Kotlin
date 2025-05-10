@@ -1,0 +1,88 @@
+spring:
+  application:
+    name: payment-simulator
+  profiles:
+    active: dev
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: jdbc:h2:mem:paymentdb
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: password
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  security:
+    user:
+      name: admin
+      password: admin
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+# JWT 설정
+jwt:
+  secret: paymentsimulatorjwtsecretkey12345678901234567890
+  expiration: 3600000 # 1시간 (밀리초)
+
+# 로깅 설정
+logging:
+  level:
+    root: INFO
+    com.donait.paymentsimulator: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+---
+# 개발 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: dev
+  # 개발 환경 특화 설정
+
+---
+# 테스트 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: test
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:h2:mem:testdb
+    
+---
+# 운영 환경 설정
+spring:
+  config:
+    activate:
+      on-profile: prod
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+  # 운영 환경에서는 MySQL과 같은 DB 사용을 위한 설정 필요
+  # datasource:
+  #   url: jdbc:mysql://localhost:3306/paymentdb
+  #   driver-class-name: com.mysql.cj.jdbc.Driver
+  #   username: ${DB_USERNAME}
+  #   password: ${DB_PASSWORD}
+
+logging:
+  level:
+    root: WARN
+    com.donait.paymentsimulator: INFO 
